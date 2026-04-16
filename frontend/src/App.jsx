@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import './App.css'
-import { LayeredDemo } from './architectures/layered/LayeredDemo.jsx'
-import { BlackboardDemo } from './architectures/blackboard/BlackboardDemo.jsx'
-import { architectureMeta } from './data/architectureMeta.js'
+import { LayeredDemo } from './components/LayeredDemo.jsx'
+import { BlackboardDemo } from './components/BlackboardDemo.jsx'
+import { architectureMeta } from './architectureMeta.js'
 
 const intakeFields = [
   'Name, date of birth, sex, and contact information',
