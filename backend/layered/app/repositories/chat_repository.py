@@ -1,3 +1,5 @@
+from typing import Optional
+
 from sqlalchemy.orm import Session
 from app.models.domain import ChatMessage
 
@@ -16,7 +18,7 @@ class ChatRepository:
         return chat
 
     @staticmethod
-    def get_by_id(db: Session, chat_message_id: int) -> ChatMessage | None:
+    def get_by_id(db: Session, chat_message_id: int) -> Optional[ChatMessage]:
         return db.query(ChatMessage).filter(ChatMessage.id == chat_message_id).first()
 
     @staticmethod

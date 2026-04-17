@@ -2,41 +2,28 @@ import { useState } from 'react'
 import './App.css'
 import { LayeredDemo } from './components/LayeredDemo.jsx'
 import { BlackboardDemo } from './components/BlackboardDemo.jsx'
+import { ChatWorkspace } from './components/ChatWorkspace.jsx'
 import { architectureMeta } from './architectureMeta.js'
 
 const intakeFields = [
-  'Name, date of birth, sex, and contact information',
-  'Health goals and current weight',
-  'Current medications and other profile context',
+  'Name plus profile context used by both architectures',
+  'Health goals stored in the selected backend profile flow',
+  'Medications saved and reused in later responses',
 ]
 
 const capabilities = [
-  'Create and update a user health profile through an intake form',
-  'Accept health-related questions through a chatbot interface',
-  'Use stored profile data to generate personalized guidance',
-  'Provide general wellness support outside clinical settings',
-  'Present the system as supportive and informational, not a replacement for medical professionals',
+  'Switch between layered and blackboard backends from one shared chat UI',
+  'Create or update profile context before generating wellness guidance',
+  'Store chat history and saved favorites in the selected architecture',
+  'Use OpenAI through the backend rather than exposing the key in the frontend',
+  'Keep responses supportive and informational rather than diagnostic',
 ]
 
 const behaviorFlow = [
-  'User fills out the health form with personal and health-related information',
-  'System validates and stores that information in the user profile database',
-  'User submits a health-related question in the chatbot interface',
-  'System retrieves profile context and generates a tailored response',
-]
-
-const proposalAlignment = [
-  'Project title and scope match the submitted proposal: AI Healthcare Chatbot',
-  'Capabilities reflect intake, profile creation, chatbot interaction, and personalized responses',
-  'Safety positioning stays aligned with the proposal by framing the tool as supportive, not diagnostic',
-  'Architecture section still supports the final presentation requirement to compare two candidate architectures',
-]
-
-const deliverables = [
-  'Show both architecture options in the presentation',
-  'Clearly state whether one or both are implemented',
-  'Include architecture-specific component and class mappings',
-  'Show successful compilation or explain the exact build blocker honestly during the demo',
+  'User selects either the layered or blackboard backend',
+  'Shared chat UI sends profile fields and the question to the selected architecture',
+  'The backend stores or loads profile context, calls OpenAI, and persists the chat response',
+  'The user can favorite any assistant response and see saved items in the same interface',
 ]
 
 function ArchitectureCard({ option, isActive, onSelect }) {
@@ -90,14 +77,15 @@ function App() {
           <p className="eyebrow">CS 5319 Final Project</p>
           <h1>AI Healthcare Chatbot</h1>
           <p className="hero-text">
-            This project is now structured to host both a layered architecture
-            and a blackboard architecture. The shared UI stays in one place,
-            while each architecture has its own implementation workspace.
+            This app compares two working backend architectures for the same AI
+            healthcare chatbot. The frontend stays shared, while the selected
+            backend controls how profiles, chat generation, and favorites are
+            processed and stored.
           </p>
           <div className="tag-row">
-            <span>Proposal-aligned scope</span>
-            <span>Dual-architecture workspace</span>
-            <span>Shared demo UI</span>
+            <span>Shared React UI</span>
+            <span>Layered + Blackboard backends</span>
+            <span>Profiles, chat, and favorites</span>
           </div>
         </div>
         <div className="hero-side">
@@ -107,23 +95,23 @@ function App() {
           </div>
           <div className="summary-card">
             <p className="label">Repo setup</p>
-            <strong>Supports Layered + Blackboard</strong>
+            <strong>Two live backend implementations</strong>
           </div>
           <div className="summary-card">
-            <p className="label">Build status</p>
-            <strong>Pending toolchain fix</strong>
+            <p className="label">Current status</p>
+            <strong>Chat and favorites wired in both modes</strong>
           </div>
         </div>
       </section>
 
       <section className="panel">
         <div className="section-heading">
-          <p className="eyebrow">Proposal Overview</p>
-          <h2>Core system idea</h2>
+          <p className="eyebrow">Current Scope</p>
+          <h2>What this version of the project does</h2>
         </div>
         <div className="grid-two">
           <article className="info-card">
-            <h3>Major capabilities</h3>
+            <h3>Implemented capabilities</h3>
             <ul>
               {capabilities.map((item) => (
                 <li key={item}>{item}</li>
@@ -131,7 +119,7 @@ function App() {
             </ul>
           </article>
           <article className="info-card">
-            <h3>Health intake data</h3>
+            <h3>Profile inputs used at runtime</h3>
             <ul>
               {intakeFields.map((item) => (
                 <li key={item}>{item}</li>
@@ -143,12 +131,12 @@ function App() {
 
       <section className="panel">
         <div className="section-heading">
-          <p className="eyebrow">Operational Flow</p>
-          <h2>User interaction and system behavior</h2>
+          <p className="eyebrow">Runtime Flow</p>
+          <h2>How the shared UI and backends interact</h2>
         </div>
         <div className="grid-two">
           <article className="info-card">
-            <h3>Main scenario</h3>
+            <h3>Main user journey</h3>
             <ol>
               {behaviorFlow.map((item) => (
                 <li key={item}>{item}</li>
@@ -169,12 +157,12 @@ function App() {
       <section className="panel">
         <div className="section-heading split">
           <div>
-            <p className="eyebrow">Architecture Workspace</p>
-            <h2>Select the implementation path</h2>
+            <p className="eyebrow">Architecture Switcher</p>
+            <h2>Select the backend implementation</h2>
           </div>
           <p className="section-note">
-            Each architecture now has its own folder, demo model, and mapping
-            notes so the repo can grow both cleanly.
+            Both options now support profile-aware chat and saved favorites, but
+            they organize responsibility differently under the hood.
           </p>
         </div>
         <div className="grid-two">
@@ -194,32 +182,19 @@ function App() {
           <p className="eyebrow">Active Implementation</p>
           <h2>{activeMeta.workspaceTitle}</h2>
         </div>
-        {activeArchitecture === 'layered' ? <LayeredDemo /> : <BlackboardDemo />}
+        <ChatWorkspace
+          key={activeArchitecture}
+          architecture={activeArchitecture}
+          meta={activeMeta}
+        />
       </section>
 
       <section className="panel">
         <div className="section-heading">
-          <p className="eyebrow">Requirements Check</p>
-          <h2>How this structure matches both PDFs</h2>
+          <p className="eyebrow">Architecture Notes</p>
+          <h2>How the selected backend is currently organized</h2>
         </div>
-        <div className="grid-two">
-          <article className="info-card">
-            <h3>Proposal alignment</h3>
-            <ul>
-              {proposalAlignment.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
-          <article className="info-card">
-            <h3>Presentation/demo alignment</h3>
-            <ul>
-              {deliverables.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
-        </div>
+        {activeArchitecture === 'layered' ? <LayeredDemo /> : <BlackboardDemo />}
       </section>
     </main>
   )

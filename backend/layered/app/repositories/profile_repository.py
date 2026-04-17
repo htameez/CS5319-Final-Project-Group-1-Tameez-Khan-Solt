@@ -1,3 +1,5 @@
+from typing import Optional
+
 from sqlalchemy.orm import Session
 from app.models.domain import UserProfile
 from app.models.schemas import UserProfileCreate, UserProfileUpdate
@@ -13,7 +15,7 @@ class ProfileRepository:
         return profile
 
     @staticmethod
-    def get_by_id(db: Session, profile_id: int) -> UserProfile | None:
+    def get_by_id(db: Session, profile_id: int) -> Optional[UserProfile]:
         return db.query(UserProfile).filter(UserProfile.id == profile_id).first()
 
     @staticmethod

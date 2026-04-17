@@ -1,43 +1,40 @@
-import { blackboardSampleState, runBlackboardCycle } from './model.js'
-
 export function BlackboardDemo() {
-  const cycle = runBlackboardCycle(blackboardSampleState)
-
   return (
     <div className="workspace-grid">
       <article className="info-card highlight">
-        <h3>Folder idea</h3>
+        <h3>Backend structure</h3>
         <ul>
-          <li>`src/architectures/blackboard/core/` for blackboard state and controller</li>
-          <li>`src/architectures/blackboard/knowledgeSources/` for independent reasoning modules</li>
-          <li>`src/architectures/blackboard/models/` for shared message and profile objects</li>
-          <li>`src/architectures/blackboard/adapters/` for UI and storage bridges</li>
+          <li>`backend/blackboard/app/api/` is the FastAPI entry layer for chat, profiles, and favorites</li>
+          <li>`backend/blackboard/app/core/` contains the controller that drives the blackboard cycle</li>
+          <li>`backend/blackboard/app/services/knowledge_sources.py` holds the profile loader, context analyzer, AI generator, and response composer</li>
+          <li>`backend/blackboard/app/repositories/` and `db/` persist profiles, chats, and favorites</li>
         </ul>
       </article>
       <article className="info-card">
-        <h3>Sample flow</h3>
+        <h3>Blackboard flow</h3>
         <ul>
-          {cycle.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
+          <li>The shared UI writes the profile fields and question into a blackboard chat request.</li>
+          <li>The controller triggers knowledge sources to normalize input, load the profile, analyze context, and generate the response.</li>
+          <li>The shared knowledge space carries profile context forward into the OpenAI prompt.</li>
+          <li>The favorites manager saves chosen assistant messages through the blackboard favorites API.</li>
         </ul>
       </article>
       <article className="info-card">
-        <h3>Suggested classes</h3>
+        <h3>Key components</h3>
         <ul>
           <li>`BlackboardState`</li>
           <li>`BlackboardController`</li>
-          <li>`ProfileKnowledgeSource`</li>
-          <li>`SafetyKnowledgeSource`</li>
-          <li>`WellnessPlannerKnowledgeSource`</li>
+          <li>`Profile Loader` knowledge source</li>
+          <li>`AI Response Generator` knowledge source</li>
+          <li>`FavoritesManager`</li>
         </ul>
       </article>
       <article className="info-card">
-        <h3>Why it fits</h3>
+        <h3>Why it fits now</h3>
         <p>
-          This alternative is useful if you want to emphasize AI reasoning and
-          multiple contributors to one answer, which makes it a strong
-          comparison candidate for the final presentation.
+          This backend highlights how one request can move through a shared
+          state and multiple specialized knowledge sources before the controller
+          finalizes the response and persistence steps.
         </p>
       </article>
     </div>

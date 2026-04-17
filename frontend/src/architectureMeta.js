@@ -4,17 +4,17 @@ export const architectureMeta = {
     name: 'Option 1',
     title: 'Layered Architecture',
     workspaceTitle: 'Layered Architecture Workspace',
-    status: 'Implemented path',
+    status: 'Working backend',
     summary:
-      'Presentation layer, service layer, repository layer, and domain models organized as a single application.',
+      'API routes call focused services, services coordinate repositories and OpenAI, and profile-aware favorites flow through the layered backend.',
     pros: [
-      'Simple to understand and present.',
-      'Good fit for a course demo and one deployable app.',
-      'Easy to map UI, service, and data responsibilities.',
+      'Clear separation between API, service, repository, and domain layers.',
+      'Profiles, chat history, and favorites follow a direct request path.',
+      'Easy to trace from frontend action to stored database record.',
     ],
     cons: [
-      'Less flexible for distributed scaling.',
-      'Cross-layer changes can still create coupling.',
+      'More centralized orchestration inside service classes.',
+      'Less expressive for multi-step reasoning than the blackboard flow.',
     ],
   },
   blackboard: {
@@ -22,17 +22,17 @@ export const architectureMeta = {
     name: 'Option 2',
     title: 'Blackboard Architecture',
     workspaceTitle: 'Blackboard Architecture Workspace',
-    status: 'Alternative path',
+    status: 'Working backend',
     summary:
-      'Knowledge sources contribute partial reasoning to a shared blackboard state, coordinated by a controller.',
+      'A controller coordinates knowledge sources over a shared blackboard state, including profile loading, context analysis, response generation, and favorites management.',
     pros: [
-      'Strong fit for AI-style incremental reasoning.',
-      'Lets multiple knowledge sources contribute to one answer.',
-      'Useful for comparing different response-generation strategies.',
+      'Shows how profile context moves through a shared knowledge space.',
+      'Lets specialized knowledge sources contribute to one final answer.',
+      'Makes the architecture comparison more distinctive in the demo.',
     ],
     cons: [
-      'Harder to explain and implement correctly.',
-      'More moving parts for a short classroom demo.',
+      'Requires more coordination between controller, state, and knowledge sources.',
+      'The request path is less direct than the layered implementation.',
     ],
   },
 }

@@ -1,44 +1,41 @@
-import { createLayeredRecommendation, layeredSampleProfile } from './model.js'
-
 export function LayeredDemo() {
-  const output = createLayeredRecommendation(layeredSampleProfile)
-
   return (
     <div className="workspace-grid">
       <article className="info-card highlight">
-        <h3>Folder idea</h3>
+        <h3>Backend structure</h3>
         <ul>
-          <li>`src/architectures/layered/presentation/` for UI adapters</li>
-          <li>`src/architectures/layered/services/` for orchestration and validation</li>
-          <li>`src/architectures/layered/repositories/` for persistence logic</li>
-          <li>`src/architectures/layered/domain/` for profile and recommendation models</li>
+          <li>`backend/layered/app/api/` exposes REST routes for profiles, chat, and favorites</li>
+          <li>`backend/layered/app/services/` contains `ProfileService`, `ChatService`, and `FavoriteService`</li>
+          <li>`backend/layered/app/repositories/` isolates SQL persistence logic</li>
+          <li>`backend/layered/app/models/` defines the domain entities and request schemas</li>
         </ul>
       </article>
       <article className="info-card">
-        <h3>Sample flow</h3>
+        <h3>Layered flow</h3>
         <ul>
-          <li>{output.intake}</li>
-          <li>{output.service}</li>
-          <li>{output.repository}</li>
-          <li>{output.response}</li>
+          <li>The shared UI sends profile fields to the layered profile endpoints before chat.</li>
+          <li>`ChatService` loads the stored profile and asks `OpenAIService` for a response.</li>
+          <li>Repositories persist chat history and favorites in the layered database.</li>
+          <li>The frontend can favorite any assistant message through the layered favorites service.</li>
         </ul>
       </article>
       <article className="info-card">
-        <h3>Suggested classes</h3>
+        <h3>Key components</h3>
         <ul>
-          <li>`HealthProfileForm`</li>
           <li>`ProfileService`</li>
-          <li>`RecommendationService`</li>
+          <li>`ChatService`</li>
+          <li>`OpenAIService`</li>
+          <li>`FavoriteService`</li>
           <li>`ProfileRepository`</li>
           <li>`UserProfile`</li>
         </ul>
       </article>
       <article className="info-card">
-        <h3>Why it fits</h3>
+        <h3>Why it fits now</h3>
         <p>
-          This structure is the safest implementation path for your current
-          timeline because it maps directly to form input, storage, and chatbot
-          response rendering without extra coordination machinery.
+          This backend is the more direct implementation path: API routes call
+          focused services, services coordinate repositories and OpenAI, and the
+          request flow is easy to trace from UI event to database write.
         </p>
       </article>
     </div>

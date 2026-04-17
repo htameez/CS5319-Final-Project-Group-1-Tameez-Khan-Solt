@@ -16,6 +16,15 @@ class FavoriteRepository:
         return favorite
 
     @staticmethod
+    def get_by_user_and_chat(db: Session, user_profile_id: int, chat_message_id: int):
+        return (
+            db.query(FavoriteMessage)
+            .filter(FavoriteMessage.user_profile_id == user_profile_id)
+            .filter(FavoriteMessage.chat_message_id == chat_message_id)
+            .first()
+        )
+
+    @staticmethod
     def get_by_user(db: Session, user_profile_id: int):
         return (
             db.query(FavoriteMessage)
