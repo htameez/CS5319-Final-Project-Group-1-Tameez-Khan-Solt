@@ -23,6 +23,11 @@ Both architecture paths are implemented and wired into the shared UI.
 - `Blackboard backend`
   Uses a controller, shared blackboard state, and multiple knowledge sources such as the Profile Loader, Context Analyzer, AI Response Generator, Response Composer, and Favorites Manager.
 
+For the backend naming currently used in this repository:
+
+- `backend/Selected` = `Layered Architecture`
+- `backend/Unselected` = `Blackboard Architecture`
+
 For presentation/demo honesty:
 
 - both architectures are available in the UI
@@ -33,6 +38,8 @@ For presentation/demo honesty:
 
 ## Project Structure
 
+### Current Development Layout
+
 ```text
 CS5319-Final-Project-Group-1-Tameez-Khan-Solt/
 ├── frontend/
@@ -42,14 +49,14 @@ CS5319-Final-Project-Group-1-Tameez-Khan-Solt/
 │   │   ├── services/
 │   │   └── architectureMeta.js
 ├── backend/
-│   ├── layered/
+│   ├── Selected/
 │   │   ├── app/
 │   │   │   ├── api/
 │   │   │   ├── services/
 │   │   │   ├── repositories/
 │   │   │   ├── models/
 │   │   │   └── db/
-│   └── blackboard/
+│   └── Unselected/
 │       ├── app/
 │       │   ├── api/
 │       │   ├── core/
@@ -59,6 +66,24 @@ CS5319-Final-Project-Group-1-Tameez-Khan-Solt/
 │       │   └── db/
 └── docs/
 ```
+
+This is the active development layout used while both architectures are being built and tested from one shared frontend.
+
+### Required Final Submission Layout
+
+Per the project guideline, the final GitHub submission should clearly separate the two candidate architectures into:
+
+```text
+backend/Selected/
+  ...source code and executables for the architecture you finally choose...
+backend/Unselected/
+  ...source code and executables for the architecture you do not choose...
+```
+
+The repository now uses that naming convention directly under `backend/`:
+
+- `backend/Selected/` contains the layered backend
+- `backend/Unselected/` contains the blackboard backend
 
 ## What To Show In The Demo
 
@@ -169,14 +194,14 @@ Each backend should be configured in its own virtual environment.
 
 Create one `.env` file per backend.
 
-`backend/layered/.env`
+`backend/Selected/.env`
 
 ```env
 OPENAI_API_KEY=your_openai_api_key_here
 DATABASE_URL=mysql+pymysql://carebot_user:carebot_password@localhost:3306/carebot_layered
 ```
 
-`backend/blackboard/.env`
+`backend/Unselected/.env`
 
 ```env
 OPENAI_API_KEY=your_openai_api_key_here
@@ -248,20 +273,20 @@ These are needed because modern MySQL installs commonly use `caching_sha2_passwo
 
 Set up each backend in its own virtual environment.
 
-### Layered Backend
+### Selected Backend
 
 ```bash
-cd backend/layered
+cd backend/Selected
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install fastapi uvicorn sqlalchemy pydantic-settings openai pymysql cryptography
 python -m uvicorn app.main:app --reload --port 8000
 ```
 
-### Blackboard Backend
+### Unselected Backend
 
 ```bash
-cd backend/blackboard
+cd backend/Unselected
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
@@ -304,7 +329,7 @@ The Python backends do not use a separate binary compilation step, but the grade
 Optional syntax verification example:
 
 ```bash
-python3 -m py_compile backend/layered/app/main.py backend/blackboard/app/main.py
+python3 -m py_compile backend/Selected/app/main.py backend/Unselected/app/main.py
 ```
 
 ## Frontend Setup
@@ -325,18 +350,18 @@ http://localhost:5173
 
 Use three terminals.
 
-### Terminal 1: Layered
+### Terminal 1: Selected
 
 ```bash
-cd backend/layered
+cd backend/Selected
 source .venv/bin/activate
 python -m uvicorn app.main:app --reload --port 8000
 ```
 
-### Terminal 2: Blackboard
+### Terminal 2: Unselected
 
 ```bash
-cd backend/blackboard
+cd backend/Unselected
 source .venv/bin/activate
 python -m uvicorn app.main:app --reload --port 8001
 ```
@@ -390,10 +415,10 @@ Expected demo behavior:
 
 Relevant folders:
 
-- `backend/layered/app/api/`
-- `backend/layered/app/services/`
-- `backend/layered/app/repositories/`
-- `backend/layered/app/models/`
+- `backend/Selected/app/api/`
+- `backend/Selected/app/services/`
+- `backend/Selected/app/repositories/`
+- `backend/Selected/app/models/`
 
 ### Blackboard
 
@@ -405,11 +430,11 @@ Relevant folders:
 
 Relevant folders:
 
-- `backend/blackboard/app/api/`
-- `backend/blackboard/app/core/`
-- `backend/blackboard/app/services/`
-- `backend/blackboard/app/repositories/`
-- `backend/blackboard/app/models/`
+- `backend/Unselected/app/api/`
+- `backend/Unselected/app/core/`
+- `backend/Unselected/app/services/`
+- `backend/Unselected/app/repositories/`
+- `backend/Unselected/app/models/`
 
 ## Architecture Comparison For This System
 
@@ -455,48 +480,26 @@ Before final submission, the team should keep only one of these as the official 
 
 ## Changes From The Original Proposal
 
-If your final candidate architecture options changed from the proposal, document that here in the final submission.
+The final implementation stays aligned with the original proposal at the system level:
 
-Current honest project note:
+- the project is still an `AI Healthcare Chatbot`
+- the core use case is still profile-aware health and wellness question answering
+- the system still centers on user profile input, chatbot interaction, and personalized responses
 
-- the codebase now implements both `Layered` and `Blackboard` backend architectures in the same repository
-- the frontend is shared across both modes
-- the implementation includes profile-aware chat and favorites in both modes
-- MySQL can be used for both architectures through separate `DATABASE_URL` values
+The main changes from the proposal happened in how the system was packaged and implemented for the final deliverable:
 
-If the final submission differs from the originally proposed architecture options, add a short justification such as:
+- both candidate architectures were implemented in the same repository so they could be compared side by side during the demo
+- one shared React frontend is used to switch between both backend architectures at runtime instead of building two completely separate user interfaces
+- favorites were added as a visible end-to-end feature in both architectures so the demo shows a fuller operational scenario
+- the final submission structure now uses `backend/Selected` and `backend/Unselected` to match the course deliverable requirement
+- SQL persistence was kept configurable through `DATABASE_URL`, so the project can run with MySQL for the final deliverable and also with SQLite for local development if needed
 
-- the updated options better matched the implemented chatbot workflow
-- one architecture offered a clearer comparison for profile, chat, and favorites
-- implementation evidence during prototyping showed one style was easier or riskier for this system
+Rationale for these changes:
 
-## Required Submission Repository Structure
-
-The instructor guideline says the final public GitHub submission should separate the two implementations into:
-
-- `Selected/`
-- `Unselected/`
-
-That means, before final submission, the team should organize the repo so that:
-
-```text
-Selected/
-  ...source code and executables for the chosen architecture...
-Unselected/
-  ...source code and executables for the other architecture...
-```
-
-Important honest note:
-
-- the current working repository is organized under `backend/layered/` and `backend/blackboard/`
-- before final submission, the team should rename/restructure the repository to match the required `Selected` / `Unselected` format and the required GitHub naming convention from the guideline
-
-The README/Word document submitted with the final deliverable should also explicitly explain:
-
-- which architecture is `Selected`
-- which architecture is `Unselected`
-- how the implementations differ in source code, reusable components/connectors, and runtime flow
-- why the selected architecture was chosen
+- implementing both architectures in one repo made it easier to present, test, and compare the two candidate designs against the same chatbot requirements
+- using a shared frontend kept the comparison focused on architectural differences in the backend instead of UI differences
+- adding favorites strengthened the demo by showing another complete user workflow beyond simple chat
+- keeping database configuration flexible reduced setup risk during development while still supporting the required MySQL-based final deployment path
 
 ## Compiled Code / Executables
 
