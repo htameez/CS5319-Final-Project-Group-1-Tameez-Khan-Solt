@@ -9,11 +9,23 @@ from app.services.knowledge_sources import (
 
 
 def run_blackboard_cycle(state: BlackboardState) -> BlackboardState:
-    profile_knowledge_source(state)
-    context_knowledge_source(state)
-    safety_knowledge_source(state)
-    wellness_planner_knowledge_source(state)
-    response_composer_knowledge_source(state)
+    while state.final_response is None:
+
+        if state.context is None:
+            context_knowledge_source(state)
+            continue
+
+        if state.safety is None:
+            safety_knowledge_source(state)
+            continue
+
+        if state.draft_response is None:
+            wellness_planner_knowledge_source(state)
+            continue
+
+        if state.final_response is None:
+            response_composer_knowledge_source(state)
+            continue
 
     state.trace.append(f"Controller selected the final response for {state.name}.")
     return state
