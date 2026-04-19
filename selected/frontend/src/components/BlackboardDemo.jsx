@@ -4,16 +4,16 @@ export function BlackboardDemo() {
       <article className="info-card highlight">
         <h3>Backend structure</h3>
         <ul>
-          <li>`backend/Unselected/app/api/` is the FastAPI entry layer for chat, profiles, and favorites</li>
-          <li>`backend/Unselected/app/core/` contains the controller that drives the blackboard cycle</li>
-          <li>`backend/Unselected/app/services/knowledge_sources.py` holds the profile loader, context analyzer, AI generator, and response composer</li>
-          <li>`backend/Unselected/app/repositories/` and `db/` persist profiles, chats, and favorites</li>
+          <li>`unselected/backend/app/api/` is the FastAPI entry layer for chat, profiles, and favorites</li>
+          <li>`unselected/backend/app/core/` contains the controller that drives the blackboard cycle</li>
+          <li>`unselected/backend/app/services/knowledge_sources.py` holds the profile loader, context analyzer, AI generator, and response composer</li>
+          <li>`unselected/backend/app/repositories/` and `db/` persist profiles, chats, and favorites</li>
         </ul>
       </article>
       <article className="info-card">
         <h3>Blackboard flow</h3>
         <ul>
-          <li>The shared UI writes the profile fields and question into a blackboard chat request.</li>
+          <li>The unselected frontend writes the profile fields and question into a blackboard chat request.</li>
           <li>The controller triggers knowledge sources to normalize input, load the profile, analyze context, and generate the response.</li>
           <li>The shared knowledge space carries profile context forward into the OpenAI prompt.</li>
           <li>The favorites manager saves chosen assistant messages through the blackboard favorites API.</li>

@@ -4,16 +4,16 @@ export function LayeredDemo() {
       <article className="info-card highlight">
         <h3>Backend structure</h3>
         <ul>
-          <li>`backend/Selected/app/api/` exposes REST routes for profiles, chat, and favorites</li>
-          <li>`backend/Selected/app/services/` contains `ProfileService`, `ChatService`, and `FavoriteService`</li>
-          <li>`backend/Selected/app/repositories/` isolates SQL persistence logic</li>
-          <li>`backend/Selected/app/models/` defines the domain entities and request schemas</li>
+          <li>`selected/backend/app/api/` exposes REST routes for profiles, chat, and favorites</li>
+          <li>`selected/backend/app/services/` contains `ProfileService`, `ChatService`, and `FavoriteService`</li>
+          <li>`selected/backend/app/repositories/` isolates SQL persistence logic</li>
+          <li>`selected/backend/app/models/` defines the domain entities and request schemas</li>
         </ul>
       </article>
       <article className="info-card">
         <h3>Layered flow</h3>
         <ul>
-          <li>The shared UI sends profile fields to the layered profile endpoints before chat.</li>
+          <li>The selected frontend sends profile fields to the layered profile endpoints before chat.</li>
           <li>`ChatService` loads the stored profile and asks `OpenAIService` for a response.</li>
           <li>Repositories persist chat history and favorites in the layered database.</li>
           <li>The frontend can favorite any assistant message through the layered favorites service.</li>

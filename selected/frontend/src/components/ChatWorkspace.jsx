@@ -163,7 +163,7 @@ export function ChatWorkspace({ architecture, meta }) {
       <article className="info-card chat-panel">
         <div className="chat-panel-header">
           <div>
-            <p className="eyebrow">Shared Chat UI</p>
+            <p className="eyebrow">Architecture UI</p>
             <h3>{meta.title}</h3>
           </div>
           <span className="pill">{architectureApiMeta[architecture].label}</span>
@@ -214,7 +214,7 @@ export function ChatWorkspace({ architecture, meta }) {
           </label>
           <div className="chat-actions">
             <button className="switch-button active" type="submit" disabled={status === 'loading'}>
-              {status === 'loading' ? 'Sending...' : 'Send to selected architecture'}
+              {status === 'loading' ? 'Sending...' : 'Send to architecture'}
             </button>
             <p className="endpoint-note">{architectureApiMeta[architecture].endpoint}</p>
           </div>
