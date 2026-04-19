@@ -139,6 +139,126 @@ Important notes:
 - if you leave out `DATABASE_URL`, SQLite is used by default
 - if you leave out `OPENAI_API_KEY`, the selected backend will fail on startup because that key is required there
 
+## MySQL Database Setup
+
+If you want to use MySQL instead of SQLite, create two separate databases so each architecture stores its own data independently.
+
+Recommended database names:
+
+- `carebot_layered` for `selected/backend`
+- `carebot_blackboard` for `unselected/backend`
+
+### 1. Start MySQL
+
+Make sure your MySQL server is running.
+
+Examples:
+
+```bash
+mysql --version
+```
+
+If you use Homebrew on macOS:
+
+```bash
+brew services start mysql
+```
+
+### 2. Log In To MySQL
+
+```bash
+mysql -u root -p
+```
+
+Enter your MySQL root password when prompted.
+
+### 3. Create The Databases
+
+Run these commands inside the MySQL shell:
+
+```sql
+CREATE DATABASE carebot_layered;
+CREATE DATABASE carebot_blackboard;
+```
+
+### 4. Create An App User
+
+You can use a dedicated MySQL user for the project instead of `root`.
+
+Example:
+
+```sql
+CREATE USER 'carebot_user'@'localhost' IDENTIFIED BY 'carebot_password';
+GRANT ALL PRIVILEGES ON carebot_layered.* TO 'carebot_user'@'localhost';
+GRANT ALL PRIVILEGES ON carebot_blackboard.* TO 'carebot_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+You can change `carebot_user` and `carebot_password` to any values you want. If you do, make sure the same values appear in your `.env` files.
+
+### 5. Put The MySQL Connection String In Each `.env`
+
+For the selected layered backend, create `selected/backend/.env`:
+
+```env
+OPENAI_API_KEY=your_openai_api_key_here
+DATABASE_URL=mysql+pymysql://carebot_user:carebot_password@localhost:3306/carebot_layered
+```
+
+For the unselected blackboard backend, create `unselected/backend/.env`:
+
+```env
+OPENAI_API_KEY=your_openai_api_key_here
+DATABASE_URL=mysql+pymysql://carebot_user:carebot_password@localhost:3306/carebot_blackboard
+```
+
+### 6. Start The Backend
+
+When the backend starts, SQLAlchemy will connect using the `DATABASE_URL`. The app creates its tables on startup.
+
+Selected backend:
+
+```bash
+cd selected/backend
+./.venv/bin/python -m uvicorn app.main:app --reload --port 8000
+```
+
+Unselected backend:
+
+```bash
+cd unselected/backend
+./.venv/bin/python -m uvicorn app.main:app --reload --port 8001
+```
+
+### 7. Verify The Databases
+
+Inside the MySQL shell, you can check that the databases exist:
+
+```sql
+SHOW DATABASES;
+```
+
+To inspect tables after the app has started and handled requests:
+
+```sql
+USE carebot_layered;
+SHOW TABLES;
+```
+
+and
+
+```sql
+USE carebot_blackboard;
+SHOW TABLES;
+```
+
+### Notes
+
+- use `localhost` and port `3306` unless your MySQL server is configured differently
+- if your MySQL username, password, host, or port are different, update the `DATABASE_URL` accordingly
+- if a password contains special characters like `@`, `:`, or `/`, it may need URL encoding inside `DATABASE_URL`
+- if you do not want to configure MySQL, you can use SQLite instead and skip this section
+
 ## Install Dependencies
 
 ### Selected Architecture
